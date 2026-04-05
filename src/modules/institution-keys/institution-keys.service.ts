@@ -49,7 +49,7 @@ export class InstitutionKeysService {
       dto.algorithm,
     );
 
-    const masterSecret = this.config.get<string>(
+    const masterSecret = this.config.getOrThrow<string>(
       'INSTITUTION_ENCRYPTION_SECRET',
     );
     const derivedKey = deriveInstitutionKey(masterSecret, institutionId);
@@ -135,7 +135,7 @@ export class InstitutionKeysService {
     if (!keyPair?.privateKeyEncrypted) {
       throw new NotFoundException('No active institution key pair found.');
     }
-    const masterSecret = this.config.get<string>(
+    const masterSecret = this.config.getOrThrow<string>(
       'INSTITUTION_ENCRYPTION_SECRET',
     );
     const derivedKey = deriveInstitutionKey(masterSecret, institutionId);
