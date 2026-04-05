@@ -6,8 +6,12 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { validateEnv } from './common/config/env.validation';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { S3Module } from './common/s3/s3.module';
-
-// Feature modules added per step below
+import { AuthModule } from './modules/auth/auth.module';
+import { InstitutionModule } from './modules/institution/institution.module';
+import { AuthorityModule } from './modules/authority/authority.module';
+import { InstitutionKeysModule } from './modules/institution-keys/institution-keys.module';
+import { InstitutionCertificatesModule } from './modules/institution-certificates/institution-certificates.module';
+import { StampImageModule } from './modules/stamp-image/stamp-image.module';
 
 @Module({
   imports: [
@@ -19,6 +23,12 @@ import { S3Module } from './common/s3/s3.module';
     ]),
     PrismaModule,
     S3Module,
+    AuthModule,
+    InstitutionModule,
+    AuthorityModule,
+    InstitutionKeysModule,
+    InstitutionCertificatesModule,
+    StampImageModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
