@@ -1,98 +1,115 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# API Institution
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Institution-management backend for the Gracon platform.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This service manages institutions, institutional membership, stamp-authority assignment, institution key material, certificates, and stamp-image uploads. It supplies the institutional trust material consumed later by the stamping service.
 
-## Description
+## Overview
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Runtime: NestJS + TypeScript
+- Default port: `3004`
+- Database: shared Neon/Postgres via Prisma
+- Storage: AWS S3 for stamp images
+- Primary domain: institution trust and authority lifecycle
 
-## Project setup
+## What This Service Owns
 
-```bash
-$ npm install
+- Institution CRUD
+- Member add/remove flows
+- Institution RSA key generation and encrypted storage
+- Institution certificate lifecycle
+- Stamp-authority grant and revoke logic
+- Institution stamp-image upload and retrieval
+
+## Core Skills Needed
+
+- NestJS and Prisma service design
+- Public/private key lifecycle management
+- PBKDF2 + AES-GCM private-key protection
+- Role-based institutional authority modeling
+- S3-based asset handling
+
+## Techniques Used
+
+- RSA-4096 key generation
+- PBKDF2-derived encryption keys from `INSTITUTION_ENCRYPTION_SECRET`
+- Server-side-only private-key handling
+- Single active institutional key/certificate model
+- Revocable stamp-authority records
+- Shared trust contract with `api/stamp`
+
+## Main Modules
+
+```text
+src/
+  common/
+    decorators/
+    prisma/
+    s3/
+  modules/
+    auth/
+    authority/
+    institution/
+    institution-certificates/
+    institution-keys/
+    stamp-image/
 ```
 
-## Compile and run the project
+## Folder Structure
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```text
+api/institution/
+  prisma/
+  src/
+    common/
+    modules/
+  test/
+  package.json
+  nest-cli.json
 ```
 
-## Run tests
+## Local Commands
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
+npm run start:dev
+npm run build
+npm run test
+npm run lint
+npx prisma generate
 ```
 
-## Deployment
+## Environment Notes
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Key variables:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```env
+APP_PORT=3004
+DATABASE_URL=
+JWT_SECRET=
+INSTITUTION_ENCRYPTION_SECRET=
+AWS_REGION=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET_NAME=
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Integration Boundaries
 
-## Resources
+- Accepts user JWTs issued by `api/auth` for identity
+- Must stay cryptographically aligned with `api/stamp`
+- Should not leak institution private keys or derived secrets under any condition
 
-Check out a few resources that may come in handy when working with NestJS:
+## Important Rules
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- Private keys never leave the server
+- Changing key-derivation logic requires coordinated changes in `api/stamp`
+- Only institution owners/admins can grant authority
+- Authority validation must always respect revocation state
 
-## Support
+## Contribution Checklist
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Confirm any key-material change against the stamp service contract
+- Keep certificate rollover and active-key assumptions explicit
+- Treat institutional authority as auditable security state, not convenience metadata
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
