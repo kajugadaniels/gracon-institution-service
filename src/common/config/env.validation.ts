@@ -1,7 +1,7 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import {
   IsString, IsNotEmpty, IsNumber,
-  IsIn, Min, Max, MinLength, validateSync,
+  IsIn, IsOptional, Min, Max, MinLength, validateSync,
 } from 'class-validator';
 
 class EnvironmentVariables {
@@ -32,6 +32,10 @@ class EnvironmentVariables {
   @IsString() @IsNotEmpty() AWS_SECRET_ACCESS_KEY: string;
   @IsString() @IsNotEmpty() AWS_S3_BUCKET_NAME:    string;
   @IsString() @IsNotEmpty() FRONTEND_URL:           string;
+
+  // Optional extra allowed origins for CORS, comma-separated.
+  // Used so multiple frontends (user, admin, documents) can call this API.
+  @IsOptional() @IsString() FRONTEND_URLS?: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {
