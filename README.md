@@ -59,6 +59,7 @@ src/
 
 ```text
 api/institution/
+  agents/
   prisma/
   src/
     common/
@@ -67,6 +68,15 @@ api/institution/
   package.json
   nest-cli.json
 ```
+
+## AI Agent Rules
+
+Project-specific AI execution rules live in [`agents/README.md`](./agents/README.md).
+Read that guide before changing institution trust, authority grants, key
+material, certificates, stamp images, Prisma read models, or cross-service
+stamp compatibility. These local rules supplement the monorepo root
+`AGENTS.md`; they do not override platform-wide security, service-boundary, or
+git-command rules.
 
 ## Local Commands
 
@@ -113,3 +123,7 @@ AWS_S3_BUCKET_NAME=
 - Keep certificate rollover and active-key assumptions explicit
 - Treat institutional authority as auditable security state, not convenience metadata
 
+## Testing Rule
+
+- If code is pure logic or can be mocked cleanly, add a unit test.
+- If code depends on Nest bootstrapping, DB wiring, or HTTP flow, prefer e2e or integration tests.
