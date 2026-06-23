@@ -20,3 +20,7 @@
 - Stamp images are private assets.
 - Return presigned URLs or controlled render paths, not raw bucket secrets.
 - Validate upload MIME type and size before storage.
+
+## Environment Rules
+
+- Use only runtime `DATABASE_URL` credentials here; `DATABASE_MIGRATION_URL` belongs only in `api/database`.
