@@ -7,6 +7,8 @@
 - Institution private keys never leave the server.
 - Never log private keys, derived keys, encryption secrets, certificate private material, or S3 object secrets.
 - `INSTITUTION_ENCRYPTION_SECRET` must stay server-only.
+- Do not add new consumers of `INSTITUTION_ENCRYPTION_SECRET`; services that need
+  institutional signing proof should use an audited internal signing boundary instead.
 - Changing key derivation requires coordinated changes in `api/stamp`.
 
 ## Authority Rules
