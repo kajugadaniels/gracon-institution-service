@@ -6,7 +6,6 @@
 src/
   common/           auth decorators, Prisma, S3, config, filters, security
   modules/          institution business domains
-prisma/             shared-schema mirror for Prisma client generation
 test/               tests
 agents/             AI execution rules
 ```
