@@ -12,6 +12,9 @@ This service manages institutions, institutional membership, stamp-authority ass
 - Storage: AWS S3 for stamp images
 - Primary domain: institution trust and authority lifecycle
 
+First clone database setup:
+[docs/database-setup.md](./docs/database-setup.md)
+
 ## What This Service Owns
 
 - Institution CRUD
